@@ -1,0 +1,53 @@
+{
+  "name": "bitclient-ts",
+  "version": "0.1.0",
+  "description": "Strongly Typed Bitcoin JSON RPC Client for Nodejs",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shekohex/bitclient-ts.git"
+  },
+  "keywords": [
+    "bitcoin",
+    "rpc",
+    "json-rpc",
+    "wallet",
+    "types",
+    "ts",
+    "crypto"
+  ],
+  "author": "Shady Khalifa <shekohex@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/shekohex/bitclient-ts/issues"
+  },
+  "homepage": "https://github.com/shekohex/bitclient-ts#readme",
+  "dependencies": {
+    "jayson": "^2.0.6",
+    "typescript": "^3.1.1"
+  },
+  "devDependencies": {
+    "@types/jest": "^23.3.3",
+    "@types/node": "^10.11.4",
+    "jest": "^23.6.0",
+    "nodemon": "^1.18.4",
+    "ts-jest": "^23.10.3"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "ts"
+    ],
+    "rootDir": "./src",
+    "testRegex": ".spec.ts$",
+    "transform": {
+      "^.+\\.ts?$": "ts-jest"
+    },
+    "coverageDirectory": "../coverage",
+    "testEnvironment": "node"
+  }
+}
