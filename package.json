@@ -26,7 +26,6 @@
   },
   "homepage": "https://github.com/shekohex/bitclient-ts#readme",
   "dependencies": {
-    "jayson": "^2.0.6",
     "typescript": "^3.1.1"
   },
   "devDependencies": {
