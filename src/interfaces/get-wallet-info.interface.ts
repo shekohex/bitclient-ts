@@ -1,8 +1,8 @@
 export interface IGetWalletInfo {
-  walletversion: string;
-  balance: string;
-  txcount: string;
-  keypoololdest: string;
-  keypoolsize: string;
-  unlocked_until: string;
+  walletversion: number;
+  balance: number;
+  txcount: number;
+  keypoololdest: number;
+  keypoolsize: number;
+  unlocked_until: number;
 }

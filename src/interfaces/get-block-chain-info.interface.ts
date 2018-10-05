@@ -1,13 +1,13 @@
 export interface IGetBlockChainInfo {
   chain: string;
-  blocks: string;
-  headers: string;
+  blocks: number;
+  headers: number;
   bestblockhash: string;
-  difficulty: string;
-  mediantime: string;
-  verificationprogress: string;
+  difficulty: number;
+  mediantime: number;
+  verificationprogress: number;
   chainwork: string;
-  pruned: string;
+  pruned: boolean;
   softforks: Softfork[];
   bip9_softforks: Bip9softforks;
 }
@@ -17,22 +17,22 @@ interface Bip9softforks {
 }
 interface Segwit {
   status: string;
-  bit: string;
-  startTime: string;
-  timeout: string;
-  since: string;
+  bit: number;
+  startTime: number;
+  timeout: number;
+  since: number;
 }
 interface Csv {
   status: string;
-  startTime: string;
-  timeout: string;
-  since: string;
+  startTime: number;
+  timeout: number;
+  since: number;
 }
 interface Softfork {
   id: string;
-  version: string;
+  version: number;
   reject: Reject;
 }
 interface Reject {
-  status: string;
+  status: boolean;
 }
