@@ -67,16 +67,17 @@ function classTemplate(methods: string[]) {
    * It should not be modified by hand.
    */
     /* tslint:disable */
-    import { RpcClient, RpcClientOptions } from 'jsonrpc-ts';
+    import { RpcClient } from 'jsonrpc-ts';
+    import { BitcoinClientOptions } from './bitcoin-client-options.interface';
     import { ${INTERFACE_NAME} } from './bitcoin-rpc-service.interface';
     import { ${fileImports.join(', ')} } from './interfaces';
     export class ${CLASS_NAME} {
         private readonly rpcClient: RpcClient<${INTERFACE_NAME}>;
         /**
          * Create a **${CLASS_NAME}**.
-         * @param {RpcClientOptions} options - add options to config the underlying RPC Engine.
+         * @param {BitcoinClientOptions} options - add options to config the underlying RPC Engine.
          */
-        constructor(readonly options: RpcClientOptions) {
+        constructor(readonly options: BitcoinClientOptions) {
             this.rpcClient = new RpcClient(options);
         }
         ${methods.join('\n')}

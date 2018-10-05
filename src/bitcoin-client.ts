@@ -5,16 +5,17 @@
  * It should not be modified by hand.
  */
 /* tslint:disable */
-import { RpcClient, RpcClientOptions } from 'jsonrpc-ts';
+import { RpcClient } from 'jsonrpc-ts';
+import { BitcoinClientOptions } from './bitcoin-client-options.interface';
 import { BitcoinRpcService } from './bitcoin-rpc-service.interface';
 import { IGetWalletInfo, IGetBlockChainInfo } from './interfaces';
 export class BitcoinClient {
   private readonly rpcClient: RpcClient<BitcoinRpcService>;
   /**
    * Create a **BitcoinClient**.
-   * @param {RpcClientOptions} options - add options to config the underlying RPC Engine.
+   * @param {BitcoinClientOptions} options - add options to config the underlying RPC Engine.
    */
-  constructor(readonly options: RpcClientOptions) {
+  constructor(readonly options: BitcoinClientOptions) {
     this.rpcClient = new RpcClient(options);
   }
 
