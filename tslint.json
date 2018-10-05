@@ -17,7 +17,6 @@
     "member-ordering": [true],
     "curly": false,
     "interface-name": [false],
-    "array-type": [true],
     "no-empty-interface": true,
     "no-empty": false,
     "arrow-parens": false,
