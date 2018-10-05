@@ -6,6 +6,7 @@
  */
 import { RpcClient, RpcClientOptions } from 'jsonrpc-ts';
 import { BitcoinRpcService } from './bitcoin-rpc-service.interface';
+import { IGetBlockChainInfo, IGetWalletInfo } from './interfaces';
 export class BitcoinClient {
   private readonly rpcClient: RpcClient<BitcoinRpcService>;
   constructor(readonly options: RpcClientOptions) {
@@ -30,26 +31,24 @@ export class BitcoinClient {
   /**
    * The getwalletinfo RPC provides information about the wallet.
    */
-  public async getWalletInfo(): Promise<{
-    walletversion: number;
-    balance: number;
-    txcount: number;
-    keypoololdest: number;
-    keypoolsize: number;
-    unlocked_until: number;
-  }> {
-    const res = await this.rpcClient.makeRequest<
-      'getwalletinfo',
-      {
-        walletversion: number;
-        balance: number;
-        txcount: number;
-        keypoololdest: number;
-        keypoolsize: number;
-        unlocked_until: number;
-      }
-    >({
+  public async getWalletInfo(): Promise<IGetWalletInfo> {
+    const res = await this.rpcClient.makeRequest<'getwalletinfo', IGetWalletInfo>({
       method: 'getwalletinfo',
+      id: Date.now(),
+      params: [],
+      jsonrpc: '2.0',
+    });
+    // TODO: Handle Errors
+
+    return res.data.result!;
+  }
+
+  /**
+   * The getblockchaininfo RPC provides information about the current state of the block chain.
+   */
+  public async getBlockChainInfo(): Promise<IGetBlockChainInfo> {
+    const res = await this.rpcClient.makeRequest<'getblockchaininfo', IGetBlockChainInfo>({
+      method: 'getblockchaininfo',
       id: Date.now(),
       params: [],
       jsonrpc: '2.0',
