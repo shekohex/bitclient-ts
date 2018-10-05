@@ -1,8 +1,10 @@
 import { readFileSync, writeFileSync } from 'fs';
 import * as JsonToTS from 'json-to-ts';
 import { join } from 'path';
+
 const CLASS_NAME = 'BitcoinClient';
 const INTERFACE_NAME = 'BitcoinRpcService';
+
 interface BitcoinMethods {
   [methodName: string]: Method;
 }
@@ -24,10 +26,12 @@ interface Result {
   required: boolean;
   description: string;
 }
+
 const fileImports: string[] = [];
 const fileImportsIndex: string[] = [];
 const rawJson = readFileSync(join(__dirname, './bitcoin-methods.json'), 'utf8');
 const bitcoinMethods: BitcoinMethods = JSON.parse(rawJson);
+
 function main() {
   const methods: string[] = [];
   const records: string[] = [];
@@ -47,22 +51,16 @@ function main() {
     );
     records.push(interfaceRecordTemplate(methodName, params));
   }
-  // Save the generated file
-  writeFileSync(join(__dirname, './bitcoin-client.ts'), classTemplate(methods), {
-    encoding: 'utf8',
-  });
-  writeFileSync(join(__dirname, './bitcoin-rpc-service.interface.ts'), interfaceTemplate(records), {
-    encoding: 'utf8',
-  });
-  writeFileSync(join(__dirname, './interfaces/index.ts'), indexFileTemplate(fileImportsIndex), {
-    encoding: 'utf8',
-  });
+  // Save the generated files
+  saveFile('./bitcoin-client.ts', classTemplate(methods));
+  saveFile('./bitcoin-rpc-service.interface.ts', interfaceTemplate(records));
+  saveFile('./interfaces/index.ts', indexFileTemplate(fileImportsIndex));
 }
 
 function classTemplate(methods: string[]) {
   return `
   /**
-   * AUTO-GENERATED FILE.  DO NOT MODIFY.
+   * AUTO-GENERATED FILE. DO NOT MODIFY.
    *
    * This class was automatically generated.
    * It should not be modified by hand.
@@ -113,49 +111,15 @@ function interfaceRecordTemplate(methodName: string, params: Params) {
 function interfaceTemplate(records: string[]) {
   return `
   /**
-   * AUTO-GENERATED FILE.  DO NOT MODIFY.
+   * AUTO-GENERATED FILE. DO NOT MODIFY.
    *
-   * This class was automatically generated.
+   * This file was automatically generated.
    * It should not be modified by hand.
    */
     export interface ${INTERFACE_NAME} {
         ${records.join('\n')}
     }
     `;
-}
-
-function indexFileTemplate(files: string[]) {
-  return `
-  /**
-   * AUTO-GENERATED FILE.  DO NOT MODIFY.
-   *
-   * This class was automatically generated.
-   * It should not be modified by hand.
-   */
-  ${files.map(f => `export * from './${f}';`).join('\n')}
-  `;
-}
-
-function makeReturnType(methodName: string, returnType) {
-  if (returnType.toString() === '[object Object]') {
-    const interfaceName = toUpperCamalCase(methodName);
-    const interfaceType = JsonToTS.default(returnType, { rootName: `I${interfaceName}` });
-    fileImports.push(`I${interfaceName}`);
-    const interfaceFileName = `${toKebabCase(methodName)}.interface`;
-    fileImportsIndex.push(interfaceFileName);
-    // export it
-    interfaceType[0] = interfaceType[0].replace(/interface/g, 'export interface');
-    writeFileSync(
-      join(__dirname, `./interfaces/${interfaceFileName}.ts`),
-      interfaceType.join('\n'),
-      {
-        encoding: 'utf8',
-      },
-    );
-    return `I${interfaceName}`;
-  } else {
-    return returnType;
-  }
 }
 
 function makeMethodParams(params: Params) {
@@ -170,15 +134,48 @@ function makeMethodParams(params: Params) {
   return [formatedParams.join(', '), rawParams];
 }
 
+function makeReturnType(methodName: string, returnType) {
+  // we have a json object, so we need to convert it to interface
+  if (returnType.toString() === '[object Object]') {
+    const interfaceName = toUpperCamalCase(methodName);
+    const interfaceType = JsonToTS.default(returnType, { rootName: `I${interfaceName}` });
+    fileImports.push(`I${interfaceName}`);
+    const interfaceFileName = `${toKebabCase(methodName)}.interface`;
+    fileImportsIndex.push(interfaceFileName);
+    // export it
+    interfaceType[0] = interfaceType[0].replace(/interface/g, 'export interface');
+    saveFile(`./interfaces/${interfaceFileName}.ts`, interfaceType.join('\n'));
+    return `I${interfaceName}`;
+  } else {
+    return returnType;
+  }
+}
+
+function indexFileTemplate(files: string[]) {
+  return `
+  /**
+   * AUTO-GENERATED FILE. DO NOT MODIFY.
+   *
+   * This file was automatically generated.
+   * It should not be modified by hand.
+   */
+  ${files.map(f => `export * from './${f}';`).join('\n')}
+  `;
+}
+
 function toUpperCamalCase(word: string) {
   return word
-    .slice(0, 1)
-    .toUpperCase()
-    .concat(word.substring(1));
+    .slice(0, 1) // get 1st char
+    .toUpperCase() // make it upper case
+    .concat(word.substring(1)); // then append the rest of the string
 }
 
 function toKebabCase(word: string) {
   return word.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
+}
+
+function saveFile(relativePath: string, data: any) {
+  writeFileSync(join(__dirname, relativePath), indexFileTemplate(data), { encoding: 'utf8' });
 }
 
 // Run The script
