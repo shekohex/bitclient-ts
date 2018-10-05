@@ -72,6 +72,10 @@ function classTemplate(methods: string[]) {
     import { ${fileImports.join(', ')} } from './interfaces';
     export class ${CLASS_NAME} {
         private readonly rpcClient: RpcClient<${INTERFACE_NAME}>;
+        /**
+         * Create a **${CLASS_NAME}**.
+         * @param {RpcClientOptions} options - add options to config the underlying RPC Engine.
+         */
         constructor(readonly options: RpcClientOptions) {
             this.rpcClient = new RpcClient(options);
         }
@@ -84,6 +88,9 @@ function methodTemplate({ mName, methodParams, rawParams, paramsDocs, returnType
   return `
   /**
    * ${mDescription}${paramsDocs.length > 0 ? '\n' : ''}${paramsDocs.join('\n')}
+   * @async
+   * @public
+   * @return {${returnType}} the Rpc response as **${returnType}**
   */
     public async ${mName}(${methodParams}): Promise<${returnType}> {
         const res = await this.rpcClient.makeRequest<'${mName.toLowerCase()}', ${returnType}>({
