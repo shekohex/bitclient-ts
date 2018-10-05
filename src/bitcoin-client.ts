@@ -4,9 +4,10 @@
  * This class was automatically generated.
  * It should not be modified by hand.
  */
+/* tslint:disable */
 import { RpcClient, RpcClientOptions } from 'jsonrpc-ts';
 import { BitcoinRpcService } from './bitcoin-rpc-service.interface';
-import { IGetBlockChainInfo, IGetWalletInfo } from './interfaces';
+import { IGetWalletInfo, IGetBlockChainInfo } from './interfaces';
 export class BitcoinClient {
   private readonly rpcClient: RpcClient<BitcoinRpcService>;
   constructor(readonly options: RpcClientOptions) {
@@ -15,6 +16,7 @@ export class BitcoinClient {
 
   /**
    * The getaccount RPC returns the name of the account associated with the given address.
+   * @param {string} address - A P2PKH or P2SH Bitcoin address belonging either to a specific account or the default account (“”).
    */
   public async getAccount(address: string): Promise<string> {
     const res = await this.rpcClient.makeRequest<'getaccount', string>({

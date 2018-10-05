@@ -39,12 +39,13 @@ function main() {
   // tslint:disable-next-line:forin
   for (const methodName in bitcoinMethods) {
     const { params, result, description } = bitcoinMethods[methodName];
-    const [methodParams, rawParams] = makeMethodParams(params);
+    const [methodParams, rawParams, paramsDocs] = makeMethodParams(params);
     methods.push(
       methodTemplate({
         mName: methodName,
         methodParams,
         rawParams,
+        paramsDocs,
         returnType: makeReturnType(methodName, result.type),
         mDescription: description,
       }),
@@ -65,6 +66,7 @@ function classTemplate(methods: string[]) {
    * This class was automatically generated.
    * It should not be modified by hand.
    */
+    /* tslint:disable */
     import { RpcClient, RpcClientOptions } from 'jsonrpc-ts';
     import { ${INTERFACE_NAME} } from './bitcoin-rpc-service.interface';
     import { ${fileImports.join(', ')} } from './interfaces';
@@ -78,10 +80,10 @@ function classTemplate(methods: string[]) {
     `;
 }
 
-function methodTemplate({ mName, methodParams, rawParams, returnType, mDescription }) {
+function methodTemplate({ mName, methodParams, rawParams, paramsDocs, returnType, mDescription }) {
   return `
   /**
-   * ${mDescription}
+   * ${mDescription}${paramsDocs.length > 0 ? '\n' : ''}${paramsDocs.join('\n')}
   */
     public async ${mName}(${methodParams}): Promise<${returnType}> {
         const res = await this.rpcClient.makeRequest<'${mName.toLowerCase()}', ${returnType}>({
@@ -125,13 +127,15 @@ function interfaceTemplate(records: string[]) {
 function makeMethodParams(params: Params) {
   const formatedParams: string[] = [];
   const rawParams: string[] = [];
+  const paramsDocs: string[] = [];
   // tslint:disable-next-line:forin
   for (const param in params) {
     const currentParam = params[param];
     rawParams.push(param);
     formatedParams.push(`${param}${currentParam.required ? '' : '?'}: ${currentParam.type}`);
+    paramsDocs.push(`* @param {${currentParam.type}} ${param} - ${currentParam.description}.`);
   }
-  return [formatedParams.join(', '), rawParams];
+  return [formatedParams.join(', '), rawParams, paramsDocs];
 }
 
 function makeReturnType(methodName: string, returnType) {
