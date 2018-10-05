@@ -175,7 +175,7 @@ function toKebabCase(word: string) {
 }
 
 function saveFile(relativePath: string, data: any) {
-  writeFileSync(join(__dirname, relativePath), indexFileTemplate(data), { encoding: 'utf8' });
+  writeFileSync(join(__dirname, relativePath), data, { encoding: 'utf8' });
 }
 
 // Run The script
