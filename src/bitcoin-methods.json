@@ -21,12 +21,12 @@
     "params": {},
     "result": {
       "type": {
-        "walletversion": "number",
-        "balance": "number",
-        "txcount": "number",
-        "keypoololdest": "number",
-        "keypoolsize": "number",
-        "unlocked_until": "number"
+        "walletversion": 0,
+        "balance": 0,
+        "txcount": 0,
+        "keypoololdest": 0,
+        "keypoolsize": 0,
+        "unlocked_until": 0
       },
       "required": true,
       "description": ""
@@ -39,34 +39,34 @@
     "result": {
       "type": {
         "chain": "string",
-        "blocks": "number",
-        "headers": "number",
+        "blocks": 0,
+        "headers": 0,
         "bestblockhash": "string",
-        "difficulty": "number",
-        "mediantime": "number",
-        "verificationprogress": "number",
+        "difficulty": 0,
+        "mediantime": 0,
+        "verificationprogress": 0,
         "chainwork": "string",
-        "pruned": "boolean",
+        "pruned": true,
         "softforks": [{
           "id": "string",
-          "version": "number",
+          "version": 0,
           "reject": {
-            "status": "boolean"
+            "status": true
           }
         }],
         "bip9_softforks": {
           "csv": {
             "status": "string",
-            "startTime": "number",
-            "timeout": "number",
-            "since": "number"
+            "startTime": 0,
+            "timeout": 0,
+            "since": 0
           },
           "segwit": {
             "status": "string",
-            "bit": "number",
-            "startTime": "number",
-            "timeout": "number",
-            "since": "number"
+            "bit": 0,
+            "startTime": 0,
+            "timeout": 0,
+            "since": 0
           }
         }
       },
