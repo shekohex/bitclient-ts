@@ -1,0 +1,18 @@
+{
+  "backupWallet": {
+    "description": "The backupwallet RPC safely copies wallet.dat to the specified file, which can be a directory or a path with filename.",
+    "spec": "https://bitcoin.org/en/developer-reference#backupwallet",
+    "params": {
+      "destination": {
+        "type": "string",
+        "required": true,
+        "description": "A filename or directory name. If a filename, it will be created or overwritten. If a directory name, the file wallet.dat will be created or overwritten within that directory"
+      }
+    },
+    "result": {
+      "type": null,
+      "required": false,
+      "description": "Always null whether success or failure. The JSON-RPC error and message fields will be set if a failure occurred"
+    }
+  }
+}
