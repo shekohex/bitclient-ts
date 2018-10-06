@@ -1,0 +1,18 @@
+{
+  "estimateFee": {
+    "description": "The estimatefee RPC estimates the transaction fee per kilobyte that needs to be paid for a transaction to be included within a certain number of blocks.",
+    "spec": "https://bitcoin.org/en/developer-reference#backupwallet",
+    "params": {
+      "block": {
+        "type": "number",
+        "description": "The maximum number of blocks a transaction should have to wait before it is predicted to be included in a block. Has to be between 2 and 25 blocks",
+        "required": true
+      }
+    },
+    "result": {
+      "type": 0,
+      "required": true,
+      "description": "The estimated fee the transaction should pay in order to be included within the specified number of blocks. If the node doesn’t have enough information to make an estimate, the value -1 will be returned"
+    }
+  }
+}
