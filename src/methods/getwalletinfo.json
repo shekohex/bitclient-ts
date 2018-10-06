@@ -1,0 +1,19 @@
+{
+  "getWalletInfo": {
+    "description": "The getwalletinfo RPC provides information about the wallet.",
+    "spec": "https://bitcoin.org/en/developer-reference#getwalletinfo",
+    "params": {},
+    "result": {
+      "type": {
+        "walletversion": 0,
+        "balance": 0,
+        "txcount": 0,
+        "keypoololdest": 0,
+        "keypoolsize": 0,
+        "unlocked_until": 0
+      },
+      "required": true,
+      "description": ""
+    }
+  }
+}

@@ -1,4 +1,6 @@
-import { readFileSync, writeFileSync } from 'fs';
+import * as glob from 'fast-glob';
+import { writeFileSync } from 'fs';
+import * as JsonMerger from 'json-merger';
 import * as JsonToTS from 'json-to-ts';
 import { join } from 'path';
 
@@ -26,11 +28,21 @@ interface Result {
   required: boolean;
   description: string;
 }
-
+interface JSONEntry {
+  path: string;
+}
 const fileImports: string[] = [];
 const fileImportsIndex: string[] = [];
-const rawJson = readFileSync(join(__dirname, './bitcoin-methods.json'), 'utf8');
-const bitcoinMethods: BitcoinMethods = JSON.parse(rawJson);
+const jsonFiles = glob
+  .sync<JSONEntry>(['*.json'], {
+    cwd: join(__dirname, './methods'),
+    transform: entry => (typeof entry === 'string' ? { path: entry } : { path: entry.path }),
+  })
+  .map(e => join(__dirname, `./methods/${e.path}`));
+
+const bitcoinMethods: BitcoinMethods = JsonMerger.mergeFiles(jsonFiles, {
+  errorOnFileNotFound: true,
+});
 
 function main() {
   const methods: string[] = [];

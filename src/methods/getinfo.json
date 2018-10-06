@@ -1,0 +1,28 @@
+{
+  "getInfo": {
+    "description": "the getinfo RPC prints various information about the node and the network.",
+    "spec": "https://bitcoin.org/en/developer-reference#getinfo",
+    "params": {},
+    "result": {
+      "type": {
+        "version": 0,
+        "protocolversion": 0,
+        "walletversion": 0,
+        "balance": 0,
+        "blocks": 0,
+        "timeoffset": 0,
+        "proxy": "string",
+        "difficulty": 0,
+        "testnet": true,
+        "keypoololdest": 0,
+        "keypoolsize": 0,
+        "paytxfee": 0,
+        "relayfee": 0,
+        "unlocked_until": 0,
+        "errors": "string"
+      },
+      "required": true,
+      "description": "information about the node and network"
+    }
+  }
+}

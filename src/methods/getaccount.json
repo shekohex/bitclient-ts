@@ -1,0 +1,18 @@
+{
+  "getAccount": {
+    "description": "The getaccount RPC returns the name of the account associated with the given address.",
+    "spec": "https://bitcoin.org/en/developer-reference#getaccount",
+    "params": {
+      "address": {
+        "type": "string",
+        "required": true,
+        "description": "A P2PKH or P2SH Bitcoin address belonging either to a specific account or the default account (“”)"
+      }
+    },
+    "result": {
+      "type": "string",
+      "required": true,
+      "description": "The name of an account, or an empty string (“”, the default account)"
+    }
+  }
+}

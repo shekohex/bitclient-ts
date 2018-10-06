@@ -1,0 +1,46 @@
+{
+  "getBlockChainInfo": {
+    "description": "The getblockchaininfo RPC provides information about the current state of the block chain.",
+    "spec": "https://bitcoin.org/en/developer-reference#getblockchaininfo",
+    "params": {},
+    "result": {
+      "type": {
+        "chain": "string",
+        "blocks": 0,
+        "headers": 0,
+        "bestblockhash": "string",
+        "difficulty": 0,
+        "mediantime": 0,
+        "verificationprogress": 0,
+        "chainwork": "string",
+        "pruned": true,
+        "softforks": [
+          {
+            "id": "string",
+            "version": 0,
+            "reject": {
+              "status": true
+            }
+          }
+        ],
+        "bip9_softforks": {
+          "csv": {
+            "status": "string",
+            "startTime": 0,
+            "timeout": 0,
+            "since": 0
+          },
+          "segwit": {
+            "status": "string",
+            "bit": 0,
+            "startTime": 0,
+            "timeout": 0,
+            "since": 0
+          }
+        }
+      },
+      "required": true,
+      "description": ""
+    }
+  }
+}
