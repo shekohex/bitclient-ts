@@ -147,7 +147,7 @@ function makeMethodParams(params: Params) {
 
 function makeReturnType(methodName: string, returnType) {
   // we have a json object, so we need to convert it to interface
-  if (returnType.toString() === '[object Object]') {
+  if (returnType && returnType.toString() === '[object Object]') {
     const interfaceName = toUpperCamalCase(methodName);
     const interfaceType = JsonToTS.default(returnType, { rootName: `I${interfaceName}` });
     fileImports.push(`I${interfaceName}`);
