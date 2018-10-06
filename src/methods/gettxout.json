@@ -1,0 +1,40 @@
+{
+  "getTxOut": {
+    "description": "The gettxout RPC returns details about an unspent transaction output (UTXO).",
+    "spec": "https://bitcoin.org/en/developer-reference#gettxout",
+    "params": {
+      "TXID": {
+        "type": "string",
+        "required": true,
+        "description": "The TXID of the transaction containing the output to get, encoded as hex in RPC byte order"
+      },
+      "vout": {
+        "type": 0,
+        "required": true,
+        "description": "The output index number (vout) of the output within the transaction; the first output in a transaction is vout 0"
+      },
+      "unconfirmed": {
+        "type": false,
+        "required": false,
+        "description": "Set to true to display unconfirmed outputs from the memory pool; set to false (the default) to only display outputs from confirmed transactions"
+      }
+    },
+    "result": {
+      "type": {
+        "bestblock": "string",
+        "confirmations": 0,
+        "value": 0,
+        "scriptPubKey": 0,
+        "asm": "string",
+        "hex": "string",
+        "reqSigs": 0,
+        "type": "string",
+        "addresses": [
+          "string"
+        ],
+        "version": 0,
+        "coinbase": false
+      }
+    }
+  }
+}
