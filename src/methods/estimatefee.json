@@ -4,7 +4,7 @@
     "spec": "https://bitcoin.org/en/developer-reference#backupwallet",
     "params": {
       "block": {
-        "type": 0,
+        "type": "number",
         "description": "The maximum number of blocks a transaction should have to wait before it is predicted to be included in a block. Has to be between 2 and 25 blocks",
         "required": true
       }
