@@ -122,5 +122,21 @@
       "required": true,
       "description": "information about the node and network"
     }
+  },
+  "abandonTransaction": {
+    "description": "The abandontransaction RPC marks an in-wallet transaction and all its in-wallet descendants as abandoned. This allows their inputs to be respent.",
+    "spec": "https://bitcoin.org/en/developer-reference#abandontransaction",
+    "params": {
+      "TXID": {
+        "type": "string",
+        "required": true,
+        "description": "The TXID of the transaction that you want to abandon. The TXID must be encoded as hex in RPC byte order"
+      }
+    },
+    "result": {
+      "type": null,
+      "required": false,
+      "description": "JSON null when the transaction and all descendants were abandoned"
+    }
   }
 }
