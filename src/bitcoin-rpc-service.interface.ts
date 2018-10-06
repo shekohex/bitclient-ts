@@ -6,7 +6,8 @@
  */
 export interface BitcoinRpcService {
   getaccount: [string];
-  getwalletinfo: [];
   getblockchaininfo: [];
+  getinfo: [];
   getnewaddress: [string?, string?];
+  getwalletinfo: [];
 }
