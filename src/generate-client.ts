@@ -31,8 +31,8 @@ interface Result {
 interface JSONEntry {
   path: string;
 }
-const fileImports: string[] = [];
-const fileImportsIndex: string[] = [];
+const fileImports: Set<string> = new Set();
+const fileImportsIndex: Set<string> = new Set();
 const jsonFiles = glob
   .sync<JSONEntry>(['*.json'], {
     cwd: join(__dirname, './methods'),
@@ -68,6 +68,7 @@ function main() {
   saveFile('./bitcoin-client.ts', classTemplate(methods));
   saveFile('./bitcoin-rpc-service.interface.ts', interfaceTemplate(records));
   saveFile('./interfaces/index.ts', indexFileTemplate(fileImportsIndex));
+  console.log('GENERATED OK!');
 }
 
 function classTemplate(methods: string[]) {
@@ -81,7 +82,7 @@ function classTemplate(methods: string[]) {
     /* tslint:disable */
     import { RpcClient, RpcClientOptions } from 'jsonrpc-ts';
     import { ${INTERFACE_NAME} } from './bitcoin-rpc-service.interface';
-    import { ${fileImports.join(', ')} } from './interfaces';
+    import { ${[...fileImports.values()].join(', ')} } from './interfaces';
     export class ${CLASS_NAME} {
         private readonly rpcClient: RpcClient<${INTERFACE_NAME}>;
         /**
@@ -97,6 +98,10 @@ function classTemplate(methods: string[]) {
 }
 
 function methodTemplate({ mName, methodParams, rawParams, paramsDocs, returnType, mDescription }) {
+  if (returnType === null) {
+    // we have not emitting null as a return type, using void is nicer.
+    returnType = 'void'.replace(/'/, '');
+  }
   return `
   /**
    * ${mDescription}${paramsDocs.length > 0 ? '\n' : ''}${paramsDocs.join('\n')}
@@ -123,7 +128,8 @@ function interfaceRecordTemplate(methodName: string, params: Params) {
   // tslint:disable-next-line:forin
   for (const param in params) {
     const currentParam = params[param];
-    const formated = currentParam.required ? currentParam.type : currentParam.type.concat('?');
+    const paramType = makeParamType(param, currentParam.type);
+    const formated = currentParam.required ? paramType : paramType.toString().concat('?');
     paramTypes.push(formated);
   }
   return `${methodName.toLowerCase()}: [${paramTypes.join(', ')}]`;
@@ -151,30 +157,44 @@ function makeMethodParams(params: Params) {
   for (const param in params) {
     const currentParam = params[param];
     rawParams.push(param);
-    formatedParams.push(`${param}${currentParam.required ? '' : '?'}: ${currentParam.type}`);
-    paramsDocs.push(`* @param {${currentParam.type}} ${param} - ${currentParam.description}.`);
+    const paramType = makeParamType(param, currentParam.type);
+    formatedParams.push(`${param}${currentParam.required ? '' : '?'}: ${paramType}`);
+    paramsDocs.push(`* @param {${paramType}} ${param} - ${currentParam.description}.`);
   }
   return [formatedParams.join(', '), rawParams, paramsDocs];
+}
+
+function makeParamType(paramName: string, paramType: any) {
+  // we have a json object, so we need to convert it to interface
+  if (paramType && paramType.toString() === '[object Object]') {
+    return resolveTypeToInterface(paramName, paramType);
+  } else {
+    return paramType;
+  }
 }
 
 function makeReturnType(methodName: string, returnType) {
   // we have a json object, so we need to convert it to interface
   if (returnType && returnType.toString() === '[object Object]') {
-    const interfaceName = toUpperCamalCase(methodName);
-    const interfaceType = JsonToTS.default(returnType, { rootName: `I${interfaceName}` });
-    fileImports.push(`I${interfaceName}`);
-    const interfaceFileName = `${toKebabCase(methodName)}.interface`;
-    fileImportsIndex.push(interfaceFileName);
-    // export it
-    interfaceType[0] = interfaceType[0].replace(/interface/g, 'export interface');
-    saveFile(`./interfaces/${interfaceFileName}.ts`, interfaceType.join('\n'));
-    return `I${interfaceName}`;
+    return resolveTypeToInterface(methodName, returnType);
   } else {
     return returnType;
   }
 }
 
-function indexFileTemplate(files: string[]) {
+function resolveTypeToInterface(cName: string, cType: any) {
+  const interfaceName = toUpperCamalCase(cName);
+  const interfaceType = JsonToTS.default(cType, { rootName: `I${interfaceName}` });
+  fileImports.add(`I${interfaceName}`);
+  const interfaceFileName = `${toKebabCase(cName)}.interface`;
+  fileImportsIndex.add(interfaceFileName);
+  // export it
+  interfaceType[0] = interfaceType[0].replace(/interface/g, 'export interface');
+  saveFile(`./interfaces/${interfaceFileName}.ts`, interfaceType.join('\n'));
+  return `I${interfaceName}`;
+}
+
+function indexFileTemplate(files: Set<string>) {
   return `
   /**
    * AUTO-GENERATED FILE. DO NOT MODIFY.
@@ -182,7 +202,7 @@ function indexFileTemplate(files: string[]) {
    * This file was automatically generated.
    * It should not be modified by hand.
    */
-  ${files.map(f => `export * from './${f}';`).join('\n')}
+  ${[...files.values()].map(f => `export * from './${f}';`).join('\n')}
   `;
 }
 
