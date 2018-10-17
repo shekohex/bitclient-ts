@@ -1,0 +1,32 @@
+{
+  "bumpFee": {
+    "description": "The bumpfee RPC replaces an unconfirmed wallet transaction that signaled RBF with a new transaction that pays a higher fee. The increased fee is deducted from the change output. The command fails if the change output is too small to increase the fee or if the wallet or mempool contains a transaction that spends one of the transaction’s outputs. The -walletrbf option needs to be enabled (default is false).",
+    "spec": "https://bitcoin.org/en/developer-reference#bumpfee",
+    "params": {
+      "TXID": {
+        "type": "string",
+        "required": true,
+        "description": "The id of the transaction"
+      },
+      "bumpFeeOptions": {
+        "type": {
+          "confTarget": 0,
+          "totalFee": 0,
+          "replacement": false
+        },
+        "required": false,
+        "description": "Additional options"
+      }
+    },
+    "result": {
+      "type": {
+        "txid": "string",
+        "origfee": 0,
+        "fee": 0,
+        "errors": []
+      },
+      "required": true,
+      "description": "information about the new transaction"
+    }
+  }
+}
