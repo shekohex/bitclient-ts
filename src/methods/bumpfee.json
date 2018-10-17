@@ -8,7 +8,7 @@
         "required": true,
         "description": "The id of the transaction"
       },
-      "options": {
+      "bumpFeeOptions": {
         "type": {
           "confTarget": 0,
           "totalFee": 0,
