@@ -34,14 +34,14 @@
     "@types/jest": "^23.3.3",
     "@types/node": "^10.11.4",
     "fast-glob": "^2.2.3",
-    "jest": "^23.6.0",
+    "jest": "^29.3.1",
     "json-merger": "^1.0.1",
     "json-to-ts": "^1.5.4",
     "nodemon": "^1.18.4",
     "prettier": "^1.14.3",
     "ts-jest": "^23.10.3",
     "ts-node": "^7.0.1",
-    "tsconfig-paths": "^3.6.0"
+    "tsconfig-paths": "^3.10.1"
   },
   "jest": {
     "moduleFileExtensions": [
